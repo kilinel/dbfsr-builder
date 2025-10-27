@@ -106,7 +106,12 @@ function levelupUpdateStats(stat) {
   // Calcula os stats com base no nível e buffs
   if (raceSelect.value === 'Android') {
     baseStats[stat] = level + spentPoints[stat] + totalBuff;
-  } else {
+  }
+  else if (raceSelect.value === 'Saiyan') {
+    const levelBonus = Math.floor(level / 3);
+    baseStats[stat] = levelBonus + spentPoints[stat] + totalBuff;
+  }
+  else {
     const levelBonus = Math.floor(level / 2);
     baseStats[stat] = levelBonus + spentPoints[stat] + totalBuff;
   }
@@ -300,7 +305,11 @@ function calculateBuildStatus() {
   if (currentRace === "Android") {
     // Para Android, o stat sobe a cada nível
     bstat = currentLevel;
-  } else {
+  } 
+  else if (currentRace === 'Saiyan'){
+    bstat = Math.floor(currentLevel / 3);
+  }
+  else {
     // Para outras raças, sobe 1 a cada 2 níveis
     bstat = Math.floor(currentLevel / 2);  // Arredonda para baixo
   }
