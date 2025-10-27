@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DBFS Remastered Builder</title>
+  <link rel="icon" href="images/page-icon.png" type="image/png">
+  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="styles/styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+
+<body class="bg-success">
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid bg-body-tertiary">
+      <a class="navbar-brand" href="#" onclick="showTab('builderTab')">Final Stand: Remastered
+        Builder</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+
+          <li class="nav-item">
+            <a class="nav-link " href="#" onclick="showTab('buildStatusTab')">My Situation</a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div id="buildStatusTab" class="tab-content" style="display: none;">
+    <div class="row">
+      <div class="col">
+        <div class="container-sm mx-10 my-5">
+
+          <!-- Conteúdo da aba Situação da Build -->
+          <h2 class="text-outline text-dredd">Whats my build situation?</h2>
+          <br><br>
+          <p class="text-dredd text-outline">Disclaimer: Before putting your stats make sure remove accessories that
+            gives stats, be on base form and
+            unequip
+            all capsules.</p>
+          <br><br>
+          <div class="stat-container">
+            <div class="stat-row db-border col stat-select">
+
+              <label for="raceSelect" class="text-dblue text-outline">Race:</label>
+              <select class="text-dblue" id="currentraceSelect">
+                <option value="Saiyan">Saiyan</option>
+                <option value="Frieza">Acrosian(Frieza)</option>
+                <option value="Namekian">Namekian</option>
+                <option value="Android">Android</option>
+                <option value="Majin">Majin</option>
+                <option value="Human">Human</option>
+                <option value="Jiren">Jiren</option>
+                <option value="Alien">Alien</option>
+              </select>
+
+            </div>
+          </div>
+
+
+          <div class="stat-container">
+            <div class="stat-row db-border col stat-select">
+              <label class="text-outline text-dblue mx-1" for="currentLevel">Actual Level:</label>
+              <div class="stat-controls">
+                <input class="text-dblue" type="number" id="currentLevel" value="1" min="1" />
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-container">
+            <div class="stat-row db-border col stat-select">
+              <label class="text-outline text-gold mx-1" for="currenthealthMax">Actual Health Max:</label>
+              <div class="stat-controls">
+                <input class="text-gold text-outline" type="number" id="currenthealthMax" value="0" min="0" />
+              </div>
+            </div>
+          </div>
+          <br><br>
+          <label for="currentkiMax">Actual Ki Max:</label>
+          <input type="number" id="currentkiMax" value="0" min="0" />
+          <br><br>
+          <label for="currentKiDmg">Actual Ki Damage:</label>
+          <input type="number" id="currentkiDmg" value="0" min="0" />
+          <br><br>
+          <label for="currentMeleeDmg">Actual Melee Damage:</label>
+          <input type="number" id="currentmeleeDmg" value="0" min="0" />
+          <br><br>
+          <label for="currentkiRes">Actual Ki Res:</label>
+          <input type="number" id="currentkiRes" value="0" min="0" />
+          <br><br>
+          <label for="currentmeleeRes">Actual Melee Res:</label>
+          <input type="number" id="currentmeleeRes" value="0" min="0" />
+          <br><br>
+          <label for="currentSpeed">Actual Speed:</label>
+          <input type="number" id="currentspeed" value="0" min="0" />
+
+          <br><br>
+          <div id="error-message" style="color: red; display: none;">Please fill in all the fields.</div>
+          <br><br>
+          <button onclick="calculateBuildStatus()">See my build Situation.</button>
+
+          <div id="buildStatusResult"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div id="builderTab" class="container bg-success">
+    <div class="row">
+      <div class="col">
+        <div class="container mx-5 my-5">
+          <h2 class="text-dredd text-outline">Builder</h2>
+
+          <!-- Seleção de Versão -->
+          <div class="stat-container">
+            <div class="stat-row db-border col stat-select">
+
+              <label for="versionSelect" class="text-outline text-dblue mx-1">Game Version:</label>
+              <select class="text-dblue" id="versionSelect">
+                <option value="release">Release</option>
+                <option value="namek">Namek Update</option>
+              </select>
+            </div>
+            <p class="mx-3 text-dblue text-desc-outline">This defines the stat limit.</p>
+          </div>
+          <div class="stat-container">
+            <div class="stat-row db-border col stat-select">
+
+              <label for="level" class="text-outline text-dblue">Level Limit : </label>
+              <div class="stat-controls">
+                <input class="text-dblue" type="number" id="level-limit" value="155" min="1" readonly>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Seleção de Raça -->
+          <div class="stat-container">
+            <div class="stat-row db-border col stat-select">
+
+              <label for="raceSelect" class="text-outline text-dblue mx-1">Race:</label>
+              <select class="text-dblue" id="raceSelect" onchange="updateStats()">
+                <option value="Saiyan">Saiyan</option>
+                <option value="Frieza">Acrosian(Frieza)</option>
+                <option value="Namekian">Namekian</option>
+                <option value="Android">Android</option>
+                <option value="Majin">Majin</option>
+                <option value="Human">Human</option>
+                <option value="Jiren">Jiren</option>
+                <option value="Alien">Alien</option>
+              </select>
+            </div>
+          </div>
+          <div id="subraceContainer" class="stat-container">
+            <div class="stat-row db-border col stat-select">
+
+              <label for="subraceCheckbox" class="text-outline text-dblue mx-1">Subrace:</label>
+              <select class="text-dblue" id="subraceSelect" onchange="updateStats()">
+                <option value="Generic">Generic</option>
+                <option value="Yardrats">Yardrats</option>
+                <option value="Pikkon">Pikkon</option>
+                <option value="Saibaman">Saibaman</option>
+                <option value="Appule">Appule</option>
+                <option value="Burter">Burter</option>
+                <option value="Beerus">Beerus</option>
+                <option value="Dodoria">Dodoria</option>
+                <option value="Mushroom">Mushroom</option>
+              </select>
+
+            </div>
+          </div>
+
+          <div class="stat-container">
+            <div class="stat-row db-border col">
+              <label for="level" class="text-outline text-dblue mx-1">Level:</label>
+              <div class="stat-controls">
+                <input class="text-dblue" type="number" id="level" value="1" min="1" readonly>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stat-container">
+            <div class="stat-row db-border col">
+              <label class="text-outline text-gold mx-1">Health Max</label>
+              <div class="stat-controls">
+                <input class="text-gold" type="number" id="healthMax" value="1" min="0"
+                  onchange="handleStatChange('healthMax')" />
+                <button class="stat-btn" onclick="addPoints('healthMax')">
+                  <img src="images/sum.png" alt="sum-icon">
+                </button>
+                <button class="stat-btn" onclick="removePoints('healthMax')">
+                  <img src="images/minus.png" alt="minus-icon">
+                </button>
+              </div>
+
+            </div>
+            <p class="stat-baseshow text-descyellow text-desc-outline mx-3" id="healthMax_base_show">Health Max: 0
+              (Base) |
+              Skill Points: 0</p>
+          </div>
+
+
+          <div class="stat-container">
+            <div class="stat-row db-border col">
+              <label class="text-outline text-gold mx-1">Ki Max</label>
+              <div class="stat-controls">
+                <input class="text-gold" type="number" id="kiMax" value="1" min="0"
+                  onchange="handleStatChange('kiMax')" />
+                <button class="stat-btn" onclick="addPoints('kiMax')">
+                  <img src="images/sum.png" alt="sum-icon">
+                </button>
+                <button class="stat-btn" onclick="removePoints('kiMax')">
+                  <img src="images/minus.png" alt="minus-icon">
+                </button>
+              </div>
+            </div>
+
+            <p class="stat-baseshow text-descyellow text-desc-outline mx-3" id="kiMax_base_show">Ki Max: 0 (Base) |
+              Skill Points: 0</p>
+          </div>
+
+          <div class="stat-container">
+            <div class="stat-row db-border col">
+              <label class="text-outline text-gold mx-1">Ki Dmg</label>
+              <div class="stat-controls">
+                <input class="text-gold" type="number" id="kiDmg" value="1" min="0"
+                  onchange="handleStatChange('kiDmg')" />
+                <button class="stat-btn" onclick="addPoints('kiDmg')">
+                  <img src="images/sum.png" alt="sum-icon">
+                </button>
+                <button class="stat-btn" onclick="removePoints('kiDmg')">
+                  <img src="images/minus.png" alt="minus-icon">
+                </button>
+              </div>
+            </div>
+
+            <p class="stat-baseshow text-descyellow text-desc-outline mx-3" id="kiDmg_base_show">Ki Dmg: 0 (Base) |
+              Skill Points: 0</p>
+          </div>
+
+          <div class="stat-container">
+            <div class="stat-row db-border col">
+              <label class="text-outline text-gold mx-1">Melee Dmg</label>
+              <div class="stat-controls">
+                <input class="text-gold" type="number" id="meleeDmg" value="1" min="0"
+                  onchange="handleStatChange('meleeDmg')" />
+                <button class="stat-btn" onclick="addPoints('meleeDmg')">
+                  <img src="images/sum.png" alt="sum-icon">
+                </button>
+                <button class="stat-btn" onclick="removePoints('meleeDmg')">
+                  <img src="images/minus.png" alt="minus-icon">
+                </button>
+              </div>
+            </div>
+
+            <p class="stat-baseshow text-descyellow text-desc-outline mx-3" id="meleeDmg_base_show">Melee Dmg: 0
+              (Base)
+              |
+              Skill Points: 0</p>
+          </div>
+
+          <div class="stat-container">
+            <div class="stat-row db-border col">
+              <label class="text-outline text-gold mx-1">Ki Resistance</label>
+              <div class="stat-controls">
+                <input class="text-gold" type="number" id="kiRes" value="1" min="0"
+                  onchange="handleStatChange('kiRes')" />
+                <button class="stat-btn" onclick="addPoints('kiRes')">
+                  <img src="images/sum.png" alt="sum-icon">
+                </button>
+                <button class="stat-btn" onclick="removePoints('kiRes')">
+                  <img src="images/minus.png" alt="minus-icon">
+                </button>
+              </div>
+            </div>
+
+            <p class="stat-baseshow text-descyellow text-desc-outline mx-3" id="kiRes_base_show">KiRes: 0 (Base)
+              |
+              Skill Points: 0</p>
+          </div>
+
+
+
+          <div class="stat-container">
+            <div class="stat-row db-border col">
+              <label class="text-outline text-gold mx-1">Melee Resistance</label>
+              <div class="stat-controls">
+                <input class="text-gold" type="number" id="meleeRes" value="1" min="0"
+                  onchange="handleStatChange('meleeRes')" />
+                <button class="stat-btn" onclick="addPoints('meleeRes')">
+                  <img src="images/sum.png" alt="sum-icon">
+                </button>
+                <button class="stat-btn" onclick="removePoints('meleeRes')">
+                  <img src="images/minus.png" alt="minus-icon">
+                </button>
+              </div>
+            </div>
+
+            <p class="stat-baseshow text-descyellow text-desc-outline mx-3" id="meleeRes_base_show">MeleeRes: 0
+              (Base)
+              |
+              Skill Points: 0</p>
+          </div>
+
+
+
+          <div class="stat-container">
+            <div class="stat-row db-border col">
+              <label class="text-outline text-gold mx-1">Speed</label>
+              <div class="stat-controls">
+                <input class="text-gold" type="number" id="speed" value="1" min="0"
+                  onchange="handleStatChange('speed')" />
+                <button class="stat-btn" onclick="addPoints('speed')">
+                  <img src="images/sum.png" alt="sum-icon">
+                </button>
+                <button class="stat-btn" onclick="removePoints('speed')">
+                  <img src="images/minus.png" alt="minus-icon">
+                </button>
+              </div>
+            </div>
+
+            <p class="stat-baseshow text-descyellow text-desc-outline mx-3" id="speed_base_show">Speed: 0 (Base)
+              |
+              Skill Points: 0</p>
+          </div>
+
+
+          <div class="stat-container">
+            <div class="stat-row db-border col">
+
+              <label for="skillPoints" class="text-dredd text-outline">Skill Points Left:</label>
+              <div class="stat-controls">
+                <input class="text-dredd" type="number" id="skillPoints" value="131" min="0" readonly>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="container mx-5 my-5">
+          <div>
+            <label for="" class="text-outline text-dyellow">Capsule Slots</label>
+            <br><br>
+            <!--<label for="slot1" >Slot 1:</label> -->
+            <select class="select-capsule text-dyellow text-outline" id="slot1" onchange="handleSlotSelection('slot1')">
+              <option value="none">None</option>
+              <option value="item1">Item1</option>
+              <option value="item2">Item2</option>
+              <option value="item3">Item3</option>
+            </select>
+            <p class="text-dyellow text-outline" id="slot1-info"></p> <!-- Exibe nome e descrição do item -->
+          </div>
+
+          <div>
+            <!--<label for="slot1" >Slot 1:</label> -->
+            <select class="select-capsule text-dyellow text-outline" id="slot2" onchange="handleSlotSelection('slot2')">
+              <option value="none">None</option>
+              <option value="item1">Item 1</option>
+              <option value="item2">Item 2</option>
+              <option value="item3">Item 3</option>
+            </select>
+            <p class="text-dyellow text-outline" id="slot2-info"></p> <!-- Exibe nome e descrição do item -->
+          </div>
+
+          <div>
+            <!--<label for="slot1" >Slot 1:</label> -->
+            <select class="select-capsule text-dyellow text-outline" id="slot3" onchange="handleSlotSelection('slot3')">
+              <option value="none">None</option>
+              <option value="item1">Item 1</option>
+              <option value="item2">Item 2</option>
+              <option value="item3">Item 3</option>
+            </select>
+            <p class="text-dyellow text-outline" id="slot3-info"></p> <!-- Exibe nome e descrição do item -->
+          </div>
+
+
+          <div>
+            <!--<label for="slot1" >Slot 1:</label> -->
+            <select class="select-capsule text-dyellow text-outline" id="slot4" onchange="handleSlotSelection('slot4')">
+              <option value="none">None</option>
+              <option value="item1">Item 1</option>
+              <option value="item2">Item 2</option>
+              <option value="item3">Item 3</option>
+            </select>
+            <p class="text-dyellow text-outline" id="slot4-info"></p> <!-- Exibe nome e descrição do item -->
+          </div>
+
+
+          <br><br>
+
+          <button class="text-outline text-dredd" id="resetBtn">Reset Stats</button>
+
+
+          <button class="text-outline text-dyellow mx-3" id="btnCapture">Save Print</button>
+
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <footer class="container text-center mt-5 mb-3">
+    <small> © 2025 <strong>@kilinel</strong> All rights reserved. — v0.1.0 Alpha build</small>
+  </footer>
+</body>
+
+</html>
