@@ -134,7 +134,7 @@ function updateStats() {
   updateItemDescription('slot1', slot1Value);
   updateItemDescription('slot2', slot2Value);
   updateItemDescription('slot3', slot3Value);
-updateItemDescription('slot4', slot4Value);
+  updateItemDescription('slot4', slot4Value);
 
   preventDuplicateItems();
   // Limita o número de skill points que podemos gastar de acordo com o nível
@@ -305,8 +305,8 @@ function calculateBuildStatus() {
   if (currentRace === "Android") {
     // Para Android, o stat sobe a cada nível
     bstat = currentLevel;
-  } 
-  else if (currentRace === 'Saiyan'){
+  }
+  else if (currentRace === 'Saiyan') {
     bstat = Math.floor(currentLevel / 3);
   }
   else {
@@ -373,7 +373,7 @@ toggleSubraceCheckbox();
 
 
 function isItemEquipped(itemName) {
-  const slots = ['slot1', 'slot2', 'slot3','slot4'];
+  const slots = ['slot1', 'slot2', 'slot3', 'slot4'];
   for (let slot of slots) {
     const slotValue = document.getElementById(slot).value;
     // Verifica se o slot está preenchido com um item diferente de "none"
@@ -401,7 +401,7 @@ function preventDuplicateItems() {
     slot1: document.getElementById('slot1').value,
     slot2: document.getElementById('slot2').value,
     slot3: document.getElementById('slot3').value,
-     slot4: document.getElementById('slot4').value,
+    slot4: document.getElementById('slot4').value,
   };
 
   // Filtra os itens selecionados para remover os valores 'none'
@@ -421,7 +421,7 @@ function preventDuplicateItems() {
   }
 }
 function populateItemSelects() {
-  const slots = ['slot1', 'slot2', 'slot3','slot4']; // IDs dos selects
+  const slots = ['slot1', 'slot2', 'slot3', 'slot4']; // IDs dos selects
   slots.forEach(slotId => {
     const selectElement = document.getElementById(slotId);
 
@@ -441,9 +441,43 @@ function populateItemSelects() {
       option.textContent = `${items[itemKey].name}`;
       selectElement.appendChild(option);
     });
+
+    
+    let optionsArray = Array.from(selectElement.options);
+
+    optionsArray.sort((a, b) => a.text.localeCompare(b.text));
+
+
+    selectElement.innerHTML = "";
+
+    selectElement.value = 'none';
+
+
+    optionsArray.forEach(option => selectElement.appendChild(option));
+    const choices = new Choices(selectElement, {
+      searchEnabled: true,
+      removeItemButton: true
+    });
+
+
+
+
   });
 }
+const select = document.getElementById('my-select');
 
+  let optionsArray = Array.from(select.options);
+
+    optionsArray.sort((a, b) => a.text.localeCompare(b.text));
+
+
+    select.innerHTML = "";
+
+    optionsArray.forEach(option => select.appendChild(option));
+    const choices = new Choices(select, {
+      searchEnabled: true,
+      removeItemButton: true
+    });
 
 const equippedItems = {
   slot1: null,
@@ -460,9 +494,9 @@ function handleSlotSelection(slotId) {
   const infoElement = document.getElementById(`${slotId}-info`);
 
   const previousItem = equippedItems[slotId];
-  
+
   if (previousItem && previousItem !== 'none') {
-   
+
     updateStatsFromItem(slotId, previousItem, false); // Removendo o item anterior
   }
 
@@ -473,10 +507,10 @@ function handleSlotSelection(slotId) {
 
     // Obtém os dados do item
     const item = items[selectedItem];
-    
+
     // Aplica os buffs do item aos stats
     updateStatsFromItem(slotId, selectedItem, true); // Equipando o item
-equippedItems[slotId] = selectedItem
+    equippedItems[slotId] = selectedItem
     // Exibe o nome e a descrição do item
     infoElement.textContent = `${item.name}: ${item.description}`;
   } else {
@@ -491,7 +525,7 @@ equippedItems[slotId] = selectedItem
 
 function updateStatsFromItem(slotId, itemName, isEquipping) {
   const item = items[itemName]; // Obtém o item pelo nome
-  
+
   if (!item) return; // Se o item não existir, nada será feito
 
   for (let stat in item) {
@@ -502,15 +536,17 @@ function updateStatsFromItem(slotId, itemName, isEquipping) {
       } else {
         // Se estamos removendo, remove o valor correspondente do array
         const index = itemBuffs[stat].indexOf(item[stat]);
-       
+
         if (index !== -1) {
-          
+
           itemBuffs[stat].splice(index, 1);
         }
       }
     }
   }
 }
+
+
 
 
 

@@ -248,36 +248,51 @@
    /* suaviza pequenas alterações */
  }
 
- .select-capsule {
-   width: 145px;
-   height: 145px;
-   border-radius: 10px;
-   padding: 0 20px;
-   border: 3px solid #000000;
-   background-color: transparent;
-   /* deixa transparente */
-   font-size: 11px;
-   font-family: 'Geo', sans-serif;
-   font-weight: bold;
-   text-align: center;
-   justify-content: center;
-   white-space: normal;
-   word-wrap: break-word;
-   overflow: hidden;
-   text-overflow: ellipsis;
-   white-space: nowrap;
-   cursor: pointer;
-   appearance: none;
-   display: flex;
-   line-height: 120px;
- }
-
- .select-capsule:focus {
-   background-color: #000000;
-   /* fundo amarelo semi-transparente */
-   outline: none;
- }
 
  .stat-btn img {
    user-select: none;
  }
+
+
+ .choices__inner {
+   width: 140px;
+   height: 145px;
+   background-image: url('images/capsl3.png');
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+   color: black;
+   font-weight: bold;
+   text-align: center;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 10px;
+   box-sizing: border-box;
+   white-space: normal;
+   word-wrap: break-word;
+  
+ }
+
+ .choices__item--selectable {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   font-weight: bold;
+   white-space: normal;
+   text-align: center;
+ }
+
+ 
+ .choices__item {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-weight: bold;
+   padding: 8px 10px;
+   box-sizing: border-box;
+   white-space: normal;
+   text-align: center;
+ }
+
+ 
