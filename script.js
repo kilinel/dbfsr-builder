@@ -185,7 +185,7 @@ function updateStats() {
 
   let maxSpendablePoints = maxSpentPoints;
   if (race === "Namekian") {
-    maxSpendablePoints += 40; // +40 pontos extras para gastar, sem subir de nível
+    maxSpendablePoints += 20; // +20 pontos extras para gastar, sem subir de nível
   }
 
 
@@ -244,7 +244,7 @@ function addPoints(stat) {
   // Limite real de pontos que podem ser gastos (com bônus se Namekian)
   let maxSpendablePoints = maxLevel;
   if (race === "Namekian") {
-    maxSpendablePoints += 40;
+    maxSpendablePoints += 20;
   }
 
   if (totalSpentPoints < maxSpendablePoints) {
