@@ -41,9 +41,22 @@ const itemBuffs = {
   speed: []
 };
 
+const subraceModifiers = {
+  Generic: { higher: [], lower: [] },
+  Yardrat: { higher: [], lower: [] },
+  Mushroom: { higher: [], lower: [] },
+  Saibaman: { higher: [], lower: [] },
+  Pikkon: { higher: ['kiDmg'], lower: ['speed'] },
+  Appule: { higher: ['meleeDmg'], lower: ['meleeRes'] },
+  Burter: { higher: ['speed'], lower: ['meleeDmg'] },
+  Beerus: { higher: ['kiDmg'], lower: ['kiRes'] },
+  Dodoria: { higher: ['meleeRes', 'kiRes'], lower: ['kiDmg', 'meleeDmg'] }
+
+};
+
+
 const items = {
   item1: { name: 'Healthy Capsule', description: 'Increases your HealthMax stat by 25.', healthMax: 25, kiMax: 0, kiDmg: 0, meleeDmg: 0, kiRes: 0, meleeRes: 0, speed: 0 },
-  item2: { name: 'Healthy Capsule 2', description: 'Increases your HealthMax stat by 20.', healthMax: 20, kiMax: 0, kiDmg: 0, meleeDmg: 0, kiRes: 0, meleeRes: 0, speed: 0 },
   item3: { name: 'Backstab Capsule', description: 'Increases damage when attacking opponents from behind.', healthMax: 0, kiMax: 0, kiDmg: 0, meleeDmg: 0, kiRes: 0, meleeRes: 0, speed: 0 },
   item4: { name: 'Demon Eye Capsule', description: 'Heal a portion of your health when you defeat an enemy.', healthMax: 0, kiMax: 0, kiDmg: 0, meleeDmg: 0, kiRes: 0, meleeRes: 0, speed: 0 },
   item5: { name: 'Charge Capsule', description: '(Active Capsule) Temporarily gain 3 extra vanish dodges (changing forms removes them)', healthMax: 0, kiMax: 0, kiDmg: 0, meleeDmg: 0, kiRes: 0, meleeRes: 0, speed: 0 },
@@ -83,6 +96,9 @@ const items = {
   item40: { name: 'Earthling Capsule', description: 'Gives 5% extra damage to Humans.' },
   item41: { name: 'Eternal Youth Capsule', description: 'You no longer lose EXP on death, however, your EXP passively drains.' },
   item42: { name: 'Intense Focus Capsule', description: 'Charge Ki 5% faster.' },
+  item43: { name: 'Sadistic Dance Capsule', description: 'Inflict a slow debuff on enemies you guard break.' },
+  item44: { name: 'Blast Amplifier Capsule', description: 'Increases the damage of basic Ki Blast.' },
+  item45: { name: 'Gum Gum Rocket Capsule', description: "Become able to chase attack a target you've knocked away with Gum Gum Bazooka." },
 
 };
 
@@ -103,19 +119,37 @@ function levelupUpdateStats(stat) {
     totalBuff += buff;
   });
 
-  // Calcula os stats com base no nível e buffs
-  if (raceSelect.value === 'Android') {
-    baseStats[stat] = level + spentPoints[stat] + totalBuff;
-  }
-  else if (raceSelect.value === 'Saiyan') {
-    const levelBonus = Math.floor(level / 3);
-    baseStats[stat] = levelBonus + spentPoints[stat] + totalBuff;
-  }
-  else {
-    const levelBonus = Math.floor(level / 2);
-    baseStats[stat] = levelBonus + spentPoints[stat] + totalBuff;
+  const race = raceSelect.value;
+  const subraceSelect = document.getElementById("subraceSelect");
+  const subrace = subraceSelect ? subraceSelect.value : null;
+
+  let higher = [];
+  let lower = [];
+
+  if (race === 'Alien' && subrace && subraceModifiers[subrace]) {
+    ({ higher, lower } = subraceModifiers[subrace]);
   }
 
+  let levelBonus;
+
+  if (raceSelect.value === 'Android') {
+    levelBonus = level; // Android ganha 1 por nível
+  }
+  else if (raceSelect.value === 'Saiyan') {
+    levelBonus = Math.floor(level / 3);
+  }
+  else {
+    // Aliens subraces
+    if (higher.includes(stat)) {
+      levelBonus = level;
+    } else if (lower.includes(stat)) {
+      levelBonus = Math.floor(level / 3);
+    } else {
+      levelBonus = Math.floor(level / 2);
+    }
+  }
+
+  baseStats[stat] = levelBonus + spentPoints[stat] + totalBuff;
 
 
   // Atualiza a exibição do stat no DOM
@@ -140,18 +174,26 @@ function updateStats() {
   // Limita o número de skill points que podemos gastar de acordo com o nível
   const totalSpentPoints = Object.values(spentPoints).reduce((a, b) => a + b, 0);
   if (totalSpentPoints > 2) {
-    level = totalSpentPoints - 1; // A cada skill point gasto, o nível sobe 1
+    level = totalSpentPoints; // A cada skill point gasto, o nível sobe 1
 
   }
+  const race = raceSelect.value; // obtém a raça atual
   const maxSpentPoints = parseInt(levellimitInput.value); // Limite de skill points baseado no nível máximo
 
   // Ajuste no nível para não ultrapassar o limite
   level = Math.min(level, maxSpentPoints);
 
-  if (totalSpentPoints > maxSpentPoints) {
+  let maxSpendablePoints = maxSpentPoints;
+  if (race === "Namekian") {
+    maxSpendablePoints += 40; // +40 pontos extras para gastar, sem subir de nível
+  }
+
+
+
+  if (totalSpentPoints > maxSpendablePoints) {
     // Se ultrapassou o limite, ajusta os pontos para o máximo permitido
     Object.keys(spentPoints).forEach(stat => {
-      spentPoints[stat] = Math.max(0, Math.min(spentPoints[stat], maxSpentPoints)); // Garante que nenhum stat ultrapasse o limite
+      spentPoints[stat] = Math.max(0, Math.min(spentPoints[stat], maxSpendablePoints)); // Garante que nenhum stat ultrapasse o limite
     });
   }
 
@@ -167,7 +209,7 @@ function updateStats() {
   });
 
   // Atualiza o número de pontos restantes
-  const remainingPoints = Math.max(0, maxSpentPoints - totalSpentPoints);
+  const remainingPoints = Math.max(0, maxSpendablePoints - totalSpentPoints);
   skillPointsInput.value = remainingPoints;
 
   // Atualiza o nível no input
@@ -193,10 +235,19 @@ function handleStatChange(stat) {
 
 // Função para adicionar pontos aos stats
 function addPoints(stat) {
-  // Verifica se o jogador ainda pode gastar pontos (não ultrapassar o nível máximo)
+  const race = raceSelect.value;
   const totalSpentPoints = Object.values(spentPoints).reduce((a, b) => a + b, 0);
 
-  if (totalSpentPoints < maxLevel) {
+  // Limite baseado no nível máximo (sem bônus)
+  const maxLevel = parseInt(levellimitInput.value);
+
+  // Limite real de pontos que podem ser gastos (com bônus se Namekian)
+  let maxSpendablePoints = maxLevel;
+  if (race === "Namekian") {
+    maxSpendablePoints += 40;
+  }
+
+  if (totalSpentPoints < maxSpendablePoints) {
     spentPoints[stat] += 1; // Adiciona um ponto ao stat
     updateStats(); // Atualiza os stats e o nível
   }
@@ -408,17 +459,19 @@ function preventDuplicateItems() {
   const validItems = Object.values(selectedItems).filter(item => item !== 'none');
 
   // Verifica se algum item está repetido entre os slots (ignorando 'none')
+  /*
   const itemsInUse = new Set(validItems);
-  if (itemsInUse.size !== validItems.length) {
-    // Se algum item foi repetido, impede a seleção duplicada
-    alert('You cannot equip the same item in multiple slots.');
-
-    // Reseta os slots com valores válidos
-    Object.keys(selectedItems).forEach(slot => {
-      const selectElement = document.getElementById(slot);
-      selectElement.value = 'none'; // Reseta o slot
-    });
-  }
+   if (itemsInUse.size !== validItems.length) {
+     // Se algum item foi repetido, impede a seleção duplicada
+     alert('You cannot equip the same item in multiple slots.');
+ 
+     // Reseta os slots com valores válidos
+     Object.keys(selectedItems).forEach(slot => {
+       const selectElement = document.getElementById(slot);
+       selectElement.value = 'none'; // Reseta o slot
+     });
+   }
+  */
 }
 function populateItemSelects() {
   const slots = ['slot1', 'slot2', 'slot3', 'slot4']; // IDs dos selects
@@ -442,42 +495,32 @@ function populateItemSelects() {
       selectElement.appendChild(option);
     });
 
-    
+
     let optionsArray = Array.from(selectElement.options);
 
-    optionsArray.sort((a, b) => a.text.localeCompare(b.text));
 
 
     selectElement.innerHTML = "";
-
-    selectElement.value = 'none';
 
 
     optionsArray.forEach(option => selectElement.appendChild(option));
     const choices = new Choices(selectElement, {
       searchEnabled: true,
-      removeItemButton: true
+      removeItemButton: true,
+      placeholder: false,
+      duplicateItemsAllowed: false,
+      shouldSort: true,
+      sortFields: ['label', 'value'],
+      sorter: (a, b) => a.label.localeCompare(b.label),
+      noResultsText: 'No Capsules found'
     });
 
 
-
+    selectElement.value = 'none';
 
   });
 }
-const select = document.getElementById('my-select');
 
-  let optionsArray = Array.from(select.options);
-
-    optionsArray.sort((a, b) => a.text.localeCompare(b.text));
-
-
-    select.innerHTML = "";
-
-    optionsArray.forEach(option => select.appendChild(option));
-    const choices = new Choices(select, {
-      searchEnabled: true,
-      removeItemButton: true
-    });
 
 const equippedItems = {
   slot1: null,

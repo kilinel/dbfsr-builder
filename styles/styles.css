@@ -257,11 +257,20 @@
  .choices__inner {
    width: 140px;
    height: 145px;
-   background-image: url('images/capsl3.png');
-   background-size: cover;
-   background-position: center;
-   background-repeat: no-repeat;
-   color: black;
+  color: #FFF569;
+   font-family: 'Geo', sans-serif;
+   font-weight: bold;
+   text-shadow:
+     2px 2px 0 #000,
+     -2px 2px 0 #000,
+     2px -2px 0 #000,
+     -2px -2px 0 #000,
+     0px 2px 0 #000,
+     2px 0px 0 #000,
+     -2px 0px 0 #000,
+     0px -2px 0 #000;
+   background-color: transparent;
+   border-color: transparent;
    font-weight: bold;
    text-align: center;
    display: flex;
@@ -272,6 +281,7 @@
    white-space: normal;
    word-wrap: break-word;
   
+  
  }
 
  .choices__item--selectable {
@@ -281,6 +291,7 @@
    font-weight: bold;
    white-space: normal;
    text-align: center;
+   
  }
 
  

@@ -1,0 +1,31 @@
+* {
+     font-family: 'Geo', sans-serif;
+}
+
+.changelog-bg {
+  background: #292929;
+  border-radius: 10px;
+  
+}
+
+
+.changelog-entry {
+  background: #292929;
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-left: 4px solid #4ade80;
+  border-radius: 10px;
+}
+
+.changelog-entry h2 {
+  color: #4ade80;
+  margin-bottom: .5rem;
+}
+p,a,li,h1 {
+    color: #ffffff;
+}
+
+.date {
+  font-size: 0.9rem;
+  color: #aaa;
+}
